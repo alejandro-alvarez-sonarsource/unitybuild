@@ -19,9 +19,9 @@ jobs:
         uses: SonarSource/sonarcloud-github-c-cpp@v2
       - name: Run build-wrapper
         run: |
-          mkdir build
-          cmake -S . -B build
-          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
+          mkdir ci-build
+          cmake -S . -B ci-build
+          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ci-build/ --config Release
       - name: Upload wrapper output
         uses: actions/upload-artifact@v4
         with:
@@ -33,4 +33,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Put the name of your token here
         run: |
           # We need to specify the unity source files
-          sonar-scanner -X --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}" --define sonar.sources="src,build/CMakeFiles/UnityBuild.dir/Unity/"
+          sonar-scanner -X --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}" --define sonar.sources="src,ci-build/CMakeFiles/UnityBuild.dir/Unity/"
